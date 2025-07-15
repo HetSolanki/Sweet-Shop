@@ -1,6 +1,6 @@
 // This file sets up a global PrismaClient instance for database access
 
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@/src/generated/prisma";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 

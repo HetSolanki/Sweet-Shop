@@ -10,7 +10,7 @@ datasource db {
 
 /// Represents a sweet item with name, price, quantity, and linked category
 model Sweet {  
-  id       String   @id
+  id       String   @id @default(uuid())
   name     String  
   price    Float  
   quantity Int  
@@ -20,7 +20,7 @@ model Sweet {
 
 /// Represents a category that can group multiple sweets
 model Category {  
-  id     String  @id
+  id     String  @id @default(uuid())
   name   String  @unique  
   sweets Sweet[]
 }

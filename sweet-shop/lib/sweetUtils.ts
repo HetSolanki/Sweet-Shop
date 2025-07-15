@@ -47,3 +47,41 @@ export const addSweets = async ({
     status: 500,
   };
 };
+
+// Deletes a sweet by ID if it exists in the database
+// Returns success or appropriate error message
+export const deleteSweet = async (id: string) => {
+  try {
+    console.log(id);
+    // Check if the sweet with the given ID exists
+    const existingSweet = await prisma.sweet.findUnique({
+      where: { id },
+    });
+
+    // If not found, return a 404-like error object
+    if (!existingSweet) {
+      return {
+        error: "Sweet not found.",
+        status: 404,
+      };
+    }
+
+    // Delete the sweet from the database
+    await prisma.sweet.delete({
+      where: { id },
+    });
+
+    // Return a success message
+    return {
+      message: "Sweet deleted successfully.",
+      status: 200,
+    };
+  } catch (error) {
+    // Handle any unexpected errors (e.g. DB failure)
+    console.error("Error deleting sweet:", error);
+    return {
+      error: "An unexpected error occurred while deleting the sweet.",
+      status: 500,
+    };
+  }
+};

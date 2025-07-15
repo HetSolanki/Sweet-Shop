@@ -8,3 +8,18 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+/// Represents a sweet item with name, price, quantity, and linked category
+model Sweet {  
+  id       String   @id
+  name     String  
+  price    Float  
+  quantity Int  
+  category Category @relation(fields: [categoryId], references: [id])  
+  categoryId String
+}
+/// Represents a category that can group multiple sweets
+model Category {  
+  id     String  @id
+  name   String  @unique  
+  sweets Sweet[]
+}

@@ -6,11 +6,12 @@ export async function POST(req: Request) {
   const reqData = await req.json();
 
   // Call the addSweets utility function to handle the logic (e.g. insert into DB)
-  const res = addSweets(reqData);
+  const res = await addSweets(reqData);
 
+  console.log(res);
   // Return a success message with 201 Created status
   return Response.json(
-    { message: "Sweet Addeed Successfully.!" },
-    { status: 201 }
+    { message: res.message, error: res.error },
+    { status: res.status }
   );
 }

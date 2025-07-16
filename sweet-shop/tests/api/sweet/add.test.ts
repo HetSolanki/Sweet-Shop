@@ -6,7 +6,7 @@ describe("POST /api/sweets/add", () => {
   let categoryId: string;
 
   // Seed a test category before running the tests
-  beforeAll(async () => {
+  beforeEach(async () => {
     const category = await prisma.category.upsert({
       where: { name: "test-category" },
       update: {},
@@ -17,7 +17,7 @@ describe("POST /api/sweets/add", () => {
   });
 
   // Clean up the database after tests - (deleting test category and sweet created)
-  afterAll(async () => {
+  afterEach(async () => {
     await prisma.sweet.deleteMany({
       where: {
         categoryId,

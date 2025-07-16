@@ -40,7 +40,7 @@ export default function AlertDialogBox({ sweetId }: { sweetId: string }) {
   return (
     <AlertDialog open={open}>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" onClick={() => setOpen(true)}>
+        <Button variant="destructive" onClick={() => setOpen(true)}>
           Delete
         </Button>
       </AlertDialogTrigger>

@@ -1,70 +1,38 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
-  },
-  {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
-  },
-  {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  },
-  {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-  },
+const routes = [
+  { label: "Dashboard", href: "/" },
+  { label: "Inventory", href: "/inventory" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
-    <NavigationMenu viewport={false}>
-      <NavigationMenuItem>
-        <NavigationMenuLink className="">
-          <Link href="/docs">Docs</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink className="">
-          <Link href="/docs">Docs</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-    </NavigationMenu>
+    <header className="w-full border-b">
+      <div className="max-w-6xl mx-auto flex items-center justify-center px-6 py-4">
+        <div className="flex gap-10">
+          {routes.map((route) => {
+            const isExactMatch = pathname === route.href;
+            return (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={`transition-transform duration-300 ${
+                  isExactMatch
+                    ? "text-purple-600 font-semibold"
+                    : "text-gray-500 hover:text-purple-500"
+                }`}
+              >
+                {route.label}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </header>
   );
 }

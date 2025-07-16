@@ -40,11 +40,11 @@ export default function AddSweetDialog() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    const loadCategories = async () => {
-      const catRes = await fetchCategories();
-      setCategories(catRes || []);
+    const load = async () => {
+      const res = await fetchCategories();
+      setCategories(res || []);
     };
-    loadCategories();
+    load();
   }, []);
 
   const handleAdd = async (e: React.FormEvent) => {
@@ -67,9 +67,8 @@ export default function AddSweetDialog() {
     if (res.status === 201) {
       toast.success(res.message);
       setOpen(false);
-      location.reload(); // or window.location.reload()
+      location.reload();
     } else {
-      console.log(res);
       toast.custom(() => (
         <div
           className="w-full max-w-sm bg-red-500 border border-destructive rounded-md shadow-lg p-4 flex items-start gap-3"
@@ -87,12 +86,12 @@ export default function AddSweetDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-purple-400 font-semibold" variant="outline">
+        <Button variant="outline" className="bg-purple-400 font-semibold">
           Add Sweet
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[400px]">
         <form onSubmit={handleAdd}>
           <DialogHeader>
             <DialogTitle>Sweet Details</DialogTitle>
@@ -113,7 +112,7 @@ export default function AddSweetDialog() {
             <div className="grid gap-2">
               <Label htmlFor="category">Category</Label>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger id="category" className="w-full">
+                <SelectTrigger id="category">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>

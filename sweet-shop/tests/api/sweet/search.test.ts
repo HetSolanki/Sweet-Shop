@@ -11,14 +11,14 @@ describe("GET /api/sweets - Search & Sort", () => {
     // Create test categories
     const [catA, catB] = await Promise.all([
       prisma.category.upsert({
-        where: { name: "Milk-Based" },
+        where: { name: "Milk-Based-2" },
         update: {},
-        create: { name: "Milk-Based" },
+        create: { name: "Milk-Based-2" },
       }),
       prisma.category.upsert({
-        where: { name: "Nut-Based" },
+        where: { name: "Nut-Based-1" },
         update: {},
-        create: { name: "Nut-Based" },
+        create: { name: "Nut-Based-1" },
       }),
     ]);
 
@@ -95,7 +95,7 @@ describe("GET /api/sweets - Search & Sort", () => {
 
     expect(res.status).toBe(200);
     expect(
-      data.data.every((sweet: Sweet) => sweet.category?.name === "Milk-Based")
+      data.data.every((sweet: Sweet) => sweet.category?.name === "Milk-Based-2")
     ).toBe(true);
   });
 
@@ -110,7 +110,7 @@ describe("GET /api/sweets - Search & Sort", () => {
     expect(res.status).toBe(200);
     expect(data.data.length).toBe(1);
     expect(data.data[0].name).toBe("Milk Cake");
-    expect(data.data[0].category.name).toBe("Milk-Based");
+    expect(data.data[0].category.name).toBe("Milk-Based-2");
   });
 
   // Test case: filters sweets within a specific price range

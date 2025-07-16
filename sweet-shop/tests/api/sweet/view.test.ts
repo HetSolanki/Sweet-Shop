@@ -6,16 +6,18 @@ import { SweetSeed } from "@/types/sweetSeed";
 describe("Get all the sweets which are in stock", () => {
   let categoryId: string;
   let testData: SweetSeed[] = [];
+  let categoryName: string;
 
   // Seed testing sweets and category
   beforeEach(async () => {
     const category = await prisma.category.create({
       data: {
-        name: "chocolates",
+        name: "chocolate-based",
       },
     });
 
     categoryId = category.id; // Save category ID for deleting testing data
+    categoryName = category.name;
 
     testData = [
       {
@@ -71,9 +73,12 @@ describe("Get all the sweets which are in stock", () => {
 
   // Test Case: Retrives all the records available in stocks
   it("should returns all the records available in stocks", async () => {
-    const req = new Request("http://localhost/api/sweets", {
-      method: "GET",
-    });
+    const req = new Request(
+      `http://localhost/api/sweets?category=${categoryName}`,
+      {
+        method: "GET",
+      }
+    );
     const res = await GET(req);
     const data = await res.json();
 

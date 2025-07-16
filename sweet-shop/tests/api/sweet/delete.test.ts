@@ -9,9 +9,9 @@ describe("DELETE /api/sweets/delete/:id", () => {
   // Seed a test category and sweet before running the tests
   beforeEach(async () => {
     const category = await prisma.category.upsert({
-      where: { name: "test-category" },
+      where: { name: "methai-mix" },
       update: {},
-      create: { name: "test-category" },
+      create: { name: "methai-mix" },
     });
 
     categoryId = category.id; // Save category ID for deletion test

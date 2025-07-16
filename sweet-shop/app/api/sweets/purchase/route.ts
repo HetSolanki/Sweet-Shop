@@ -6,5 +6,6 @@ export async function POST(req: Request) {
 
   const result = await purchaseSweet(body); // Perform sweet purchase
 
+  console.log(result);
   return Response.json(result, { status: result.status });
 }

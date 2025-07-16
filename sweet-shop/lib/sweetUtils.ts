@@ -162,7 +162,8 @@ export const purchaseSweet = async ({
       return { error: "Invalid or missing sweet ID.", status: 400 };
     }
 
-    if (!quantity || typeof quantity !== "number" || quantity <= 0) {
+    const parsedQty = Number(quantity);
+    if (!quantity || isNaN(parsedQty) || parsedQty <= 0) {
       return { error: "Quantity must be greater than zero.", status: 400 };
     }
 
@@ -174,7 +175,7 @@ export const purchaseSweet = async ({
     }
 
     // Check stock availability
-    if (sweet.quantity < quantity) {
+    if (sweet.quantity < parsedQty) {
       return { error: "Not enough stock to fulfill purchase.", status: 400 };
     }
 
@@ -183,7 +184,7 @@ export const purchaseSweet = async ({
       where: { id: sweetId },
       data: {
         quantity: {
-          decrement: quantity,
+          decrement: parsedQty,
         },
       },
     });

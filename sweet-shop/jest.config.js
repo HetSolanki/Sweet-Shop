@@ -16,6 +16,7 @@ const config = {
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: "<rootDir>/",
   }),
+  
 };
 
 export default config;

@@ -7,7 +7,7 @@ describe("GET /api/sweets - Search & Sort", () => {
   let categoryAId: string;
   let categoryBId: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     // Create test categories
     const [catA, catB] = await Promise.all([
       prisma.category.upsert({
@@ -57,15 +57,19 @@ describe("GET /api/sweets - Search & Sort", () => {
   });
 
   // Clean up the database after tests - (deleting test categories and sweets created)
-  afterAll(async () => {
+  afterEach(async () => {
     await prisma.sweet.deleteMany({
       where: {
-        categoryId: categoryAId || categoryBId,
+        categoryId: {
+          in: [categoryAId, categoryBId],
+        },
       },
     });
     await prisma.category.deleteMany({
       where: {
-        id: categoryAId || categoryBId,
+        id: {
+          in: [categoryAId, categoryBId],
+        },
       },
     });
     await prisma.$disconnect();

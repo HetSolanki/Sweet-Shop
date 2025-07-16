@@ -7,7 +7,7 @@ describe("DELETE /api/sweets/delete/:id", () => {
   let categoryId: string;
 
   // Seed a test category and sweet before running the tests
-  beforeAll(async () => {
+  beforeEach(async () => {
     const category = await prisma.category.upsert({
       where: { name: "test-category" },
       update: {},
@@ -31,7 +31,13 @@ describe("DELETE /api/sweets/delete/:id", () => {
   });
 
   // Clean up the database after tests - (Removing test category created)
-  afterAll(async () => {
+  afterEach(async () => {
+    await prisma.sweet.deleteMany({
+      where: {
+        categoryId,
+      },
+    });
+
     await prisma.category.delete({
       where: {
         id: categoryId,
@@ -71,7 +77,7 @@ describe("DELETE /api/sweets/delete/:id", () => {
     };
     const res = await DELETE(req, { params });
     const data = await res.json();
-    
+
     expect(res.status).toBe(404);
     expect(data.error).toBe("Sweet not found.");
   });

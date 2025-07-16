@@ -1,17 +1,10 @@
 import { addSweets } from "@/lib/sweetUtils";
 
-// Route handler for POST /api/sweets/add
-// Adds a new sweet to the database and returns a success or error response
+// POST /api/sweets/add - Handles sweet creation
 export async function POST(req: Request) {
-  // Parse the incoming request body
   const reqData = await req.json();
 
-  // Delegate insertion logic to the service function
-  const result = await addSweets(reqData);
+  const result = await addSweets(reqData); // Perform sweet creation
 
-  // Return the structured response with correct status
-  return Response.json(
-    { message: result.message, error: result.error },
-    { status: result.status }
-  );
+  return Response.json(result, { status: result.status });
 }

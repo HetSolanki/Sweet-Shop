@@ -6,9 +6,9 @@ import { SweetSeed } from "@/types/sweetSeed";
 describe("Get all the sweets which are in stock", () => {
   let categoryId: string;
   let testData: SweetSeed[] = [];
-  
+
   // Seed testing sweets and category
-  beforeAll(async () => {
+  beforeEach(async () => {
     const category = await prisma.category.create({
       data: {
         name: "chocolates",
@@ -55,7 +55,7 @@ describe("Get all the sweets which are in stock", () => {
   });
 
   // Cleanup DB after test - deleting test sweets and categories
-  afterAll(async () => {
+  afterEach(async () => {
     await prisma.sweet.deleteMany({
       where: {
         categoryId,
@@ -77,7 +77,6 @@ describe("Get all the sweets which are in stock", () => {
     const res = await GET(req);
     const data = await res.json();
 
-    console.log(data);
     expect(res.status).toBe(200);
     expect(data.data.length).toBe(4);
     expect(

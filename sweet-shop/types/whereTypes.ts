@@ -1,4 +1,4 @@
-export interface Where {
+export interface WhereTypes {
   name: { contains?: string };
   category: { name?: { contains?: string } };
   price?: {

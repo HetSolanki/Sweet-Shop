@@ -1,5 +1,6 @@
 import { AddSweetType } from "@/types/sweetApiTypes";
 import { prisma } from "@/lib/prisma";
+import { WhereTypes } from "@/types/whereTypes";
 
 // Adds a new sweet only if the provided categoryId exists in the database
 export const addSweets = async ({
@@ -8,57 +9,53 @@ export const addSweets = async ({
   price,
   quantity,
 }: AddSweetType) => {
-  // Check if the category ID exists in the database
-  const category = await prisma.category.findUnique({
-    where: { id: categoryId },
-  });
+  try {
+    // Check if the category ID exists in the database
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId },
+    });
 
-  // If the category doesn't exist, return an error message
-  if (!category) {
-    return {
-      error: "Invalid category. Please provide a valid category ID.",
-      status: 400,
-    };
-  }
+    if (!category) {
+      return {
+        error: "Invalid category. Please provide a valid category ID.",
+        status: 400,
+      };
+    }
 
-  // Proceed to create the sweet and connect it to the valid category
-  const res = await prisma.sweet.create({
-    data: {
-      name,
-      price,
-      quantity,
-      category: {
-        connect: { id: categoryId },
+    // Proceed to create the sweet and connect it to the valid category
+    const res = await prisma.sweet.create({
+      data: {
+        name,
+        price,
+        quantity,
+        category: {
+          connect: { id: categoryId },
+        },
       },
-    },
-  });
+    });
 
-  // Return success message if sweet is created
-  if (res) {
     return {
       message: "Sweet added successfully!",
       status: 201,
     };
+  } catch (error) {
+    // Handle any unexpected errors (e.g. DB failure)
+    console.error("Error deleting sweet:", error);
+    return {
+      error: "Something went wrong while adding the sweet.",
+      status: 500,
+    };
   }
-
-  // if insertion is not succeeded
-  return {
-    error: "Something went wrong while adding the sweet.",
-    status: 500,
-  };
 };
 
 // Deletes a sweet by ID if it exists in the database
-// Returns success or appropriate error message
 export const deleteSweet = async (id: string) => {
   try {
-    console.log(id);
     // Check if the sweet with the given ID exists
     const existingSweet = await prisma.sweet.findUnique({
       where: { id },
     });
 
-    // If not found, return a 404-like error object
     if (!existingSweet) {
       return {
         error: "Sweet not found.",
@@ -71,7 +68,6 @@ export const deleteSweet = async (id: string) => {
       where: { id },
     });
 
-    // Return a success message
     return {
       message: "Sweet deleted successfully.",
       status: 200,
@@ -85,3 +81,64 @@ export const deleteSweet = async (id: string) => {
     };
   }
 };
+
+// Perform search and sort based on provided query parameters
+export const searchSweet = async ({
+  searchParams,
+}: {
+  searchParams: URLSearchParams;
+}) => {
+  const name = searchParams.get("name");
+  const category = searchParams.get("category");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const sort = searchParams.get("sort") || "name_asc";
+
+  const where: Partial<WhereTypes> = {};
+
+  // Filters records based on the name or category provided
+  if (name || category) {
+    where.name = {
+      ...(name && { contains: name }),
+    };
+
+    where.category = {
+      ...(category && { name: { contains: category } }),
+    };
+  }
+
+  // Add price range filtering only if one or both values are provided
+  if (minPrice || maxPrice) {
+    where.price = {
+      ...(minPrice && { gte: Number(minPrice) }),
+      ...(maxPrice && { lte: Number(maxPrice) }),
+    };
+  }
+
+  where.quantity = { gte: 1 };
+
+  const [sortField, sortOrder] = sort.split("_");
+  let orderBy = {};
+
+  // Dynamically construct sort field and sorting order
+  orderBy = {
+    [sortField]: sortOrder,
+  };
+
+  try {
+    const sweets = await prisma.sweet.findMany({
+      where,
+      orderBy,
+      include: {
+        category: true,
+      },
+    });
+
+    return { data: sweets, status: 200 };
+  } catch (error) {
+    console.error("Search error:", error);
+    return { error: "Failed to fetch sweets.", status: 500 };
+  }
+};
+
+export const purchaseSweet = async () => {};

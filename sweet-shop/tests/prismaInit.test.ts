@@ -7,7 +7,7 @@ describe("Prisma Initialization", () => {
     expect(version).toBeDefined();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await prisma.$disconnect();
   });
 });

@@ -5,4 +5,7 @@ export interface Where {
     gte?: number;
     lte?: number;
   };
+  quantity?: {
+    gte?: number;
+  };
 }

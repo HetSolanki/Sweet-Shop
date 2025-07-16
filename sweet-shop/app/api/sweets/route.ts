@@ -31,6 +31,8 @@ export async function GET(req: Request) {
     };
   }
 
+  where.quantity = { gte: 1 };
+  
   const [sortField, sortOrder] = sort.split("_");
   let orderBy = {};
 

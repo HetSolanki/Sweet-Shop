@@ -28,7 +28,7 @@ export const addSweets = async ({
         status: 400,
       };
     }
-    
+
     // Proceed to create the sweet and connect it to the valid category
     await prisma.sweet.create({
       data: {
@@ -148,4 +148,61 @@ export const searchSweet = async ({
   }
 };
 
-export const purchaseSweet = async () => {};
+export const purchaseSweet = async ({
+  sweetId,
+  quantity,
+}: {
+  sweetId: string;
+  quantity: string;
+}) => {
+  try {
+    // Validate inputs
+    if (!sweetId || typeof sweetId !== "string") {
+      return Response.json(
+        { error: "Invalid or missing sweet ID." },
+        { status: 400 }
+      );
+    }
+
+    if (!quantity || typeof quantity !== "number" || quantity <= 0) {
+      return Response.json(
+        { error: "Quantity must be greater than zero." },
+        { status: 400 }
+      );
+    }
+
+    // Check if sweet exists
+    const sweet = await prisma.sweet.findUnique({ where: { id: sweetId } });
+
+    if (!sweet) {
+      return Response.json({ error: "Sweet not found." }, { status: 404 });
+    }
+
+    // Check stock availability
+    if (sweet.quantity < quantity) {
+      return Response.json(
+        { error: "Not enough stock to fulfill purchase." },
+        { status: 400 }
+      );
+    }
+
+    // Perform stock update
+    const updated = await prisma.sweet.update({
+      where: { id: sweetId },
+      data: {
+        quantity: {
+          decrement: quantity,
+        },
+      },
+    });
+
+    return {
+      message: "Purchase successful!",
+      remainingStock: updated.quantity,
+      status: 200,
+    };
+  } catch (error) {
+    console.error("Purchase error:", error);
+    return { error: "Internal server error.", status: 500 };
+  }
+};

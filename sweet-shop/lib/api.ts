@@ -24,3 +24,28 @@ export const fetchCategories = async () => {
   const categories = await prisma.category.findMany({});
   return categories;
 };
+
+export const restockSweet = async (sweetId: string, quantity: string) => {
+  const res = await fetch("http://localhost:3000/api/sweets/restock", {
+    method: "POST",
+    body: JSON.stringify({ sweetId, quantity }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const results = await res.json();
+  return results;
+};
+
+export const deleteSweet = async (sweetId: string) => {
+  const res = await fetch(
+    `http://localhost:3000/api/sweets/delete/${sweetId}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  const results = await res.json();
+  return results;
+};

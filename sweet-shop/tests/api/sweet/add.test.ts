@@ -35,9 +35,8 @@ describe("POST /api/sweets/add", () => {
 
   // Test case: Creating a sweet with a valid categoryId should return 201 and success message
   it("should return 201 and success message when sweet is created with valid categoryId", async () => {
-    const validCategoryId = categoryId; // ValidId
+    const validCategoryId = categoryId; // Valid-Id
 
-    // Request payload with valid sweet data
     const body = {
       name: "Kaju Katli",
       price: 45,
@@ -45,7 +44,6 @@ describe("POST /api/sweets/add", () => {
       categoryId: validCategoryId,
     };
 
-    // Simulate a POST request to the API
     const req = new Request("http://localhost/api/sweets/add", {
       method: "POST",
       body: JSON.stringify(body),
@@ -54,11 +52,9 @@ describe("POST /api/sweets/add", () => {
       },
     });
 
-    // Call the POST handler
     const res = await POST(req);
     const data = await res.json();
 
-    // Assert response status and returned message
     expect(res.status).toBe(201);
     expect(data.message).toBe("Sweet added successfully!");
   });
@@ -72,7 +68,6 @@ describe("POST /api/sweets/add", () => {
       categoryId: "1", // Invalid category ID that doesn’t exist in DB
     };
 
-    // Simulate a POST request to the API
     const req = new Request("http://localhost/api/sweets/add", {
       method: "POST",
       body: JSON.stringify(body),
@@ -81,11 +76,9 @@ describe("POST /api/sweets/add", () => {
       },
     });
 
-    // Call the POST handler
     const res = await POST(req);
     const data = await res.json();
 
-    // Assert response status and error message
     expect(res.status).toBe(400);
     expect(data.error).toBe(
       "Invalid category. Please provide a valid category ID."

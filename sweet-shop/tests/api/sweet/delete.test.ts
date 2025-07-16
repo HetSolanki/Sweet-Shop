@@ -43,7 +43,6 @@ describe("DELETE /api/sweets/delete/:id", () => {
 
   // Test case: Deleting a valid sweet should return success message
   it("should return 200 and success message when sweet is deleted", async () => {
-    // Create a DELETE mock request to simulate the client call
     const req = new Request(`http://localhost/api/sweets/delete/${sweetId}`, {
       method: "DELETE",
     });
@@ -52,13 +51,9 @@ describe("DELETE /api/sweets/delete/:id", () => {
       id: sweetId,
     };
 
-    // Call the actual route handler with mocked request and params([:id])
     const res = await DELETE(req, { params });
-
-    // Parse response JSON body
     const data = await res.json();
 
-    // Assert that deletion was successful
     expect(res.status).toBe(200);
     expect(data.message).toBe("Sweet deleted successfully.");
   });
@@ -67,7 +62,6 @@ describe("DELETE /api/sweets/delete/:id", () => {
   it("should return 404 when sweet with given ID does not exist", async () => {
     const invalidId = "invalid-id"; // Invalid sweetId
 
-    // Create an DELETE mock request to simulate client call
     const req = new Request(`http://localhost/api/sweets/delete/${invalidId}`, {
       method: "DELETE",
     });
@@ -75,12 +69,9 @@ describe("DELETE /api/sweets/delete/:id", () => {
     const params = {
       id: invalidId,
     };
-
-    // Call actual route handler with mocked request and params([:id])
     const res = await DELETE(req, { params });
     const data = await res.json();
-
-    // Assert that a proper error message is returned
+    
     expect(res.status).toBe(404);
     expect(data.error).toBe("Sweet not found.");
   });

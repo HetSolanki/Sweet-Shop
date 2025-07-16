@@ -8,7 +8,7 @@ describe("GET /api/sweets - Search & Sort", () => {
   let categoryBId: string;
 
   beforeAll(async () => {
-    // Create two test categories
+    // Create test categories
     const [catA, catB] = await Promise.all([
       prisma.category.upsert({
         where: { name: "Milk-Based" },
@@ -63,7 +63,7 @@ describe("GET /api/sweets - Search & Sort", () => {
         categoryId: categoryAId || categoryBId,
       },
     });
-    await prisma.category.delete({
+    await prisma.category.deleteMany({
       where: {
         id: categoryAId || categoryBId,
       },
@@ -72,7 +72,7 @@ describe("GET /api/sweets - Search & Sort", () => {
   });
 
   // Test case: Returns sweets matching a partial name
-  it("should retu   rn sweets matching partial name (case-insensitive)", async () => {
+  it("should return sweets matching partial name", async () => {
     const req = new Request("http://localhost/api/sweets?name=katli");
     const res = await GET(req);
     const data = await res.json();
@@ -91,7 +91,7 @@ describe("GET /api/sweets - Search & Sort", () => {
 
     expect(res.status).toBe(200);
     expect(
-      data.data.every((sweet: Sweet) => sweet.category?.id === "Milk-Based")
+      data.data.every((sweet: Sweet) => sweet.category?.name === "Milk-Based")
     ).toBe(true);
   });
 
@@ -106,6 +106,7 @@ describe("GET /api/sweets - Search & Sort", () => {
     expect(res.status).toBe(200);
     expect(data.data.length).toBe(1);
     expect(data.data[0].name).toBe("Milk Cake");
+    expect(data.data[0].category.name).toBe("Milk-Based");
   });
 
   // Test case: filters sweets within a specific price range
@@ -130,7 +131,7 @@ describe("GET /api/sweets - Search & Sort", () => {
 
     expect(res.status).toBe(200);
     const prices = data.data.map((sweet: Sweet) => sweet.price);
-    expect(prices).toEqual([...prices].sort((a, b) => a - b));
+    expect(prices).toEqual([...prices].sort());
   });
 
   // Test case: sorts sweets by name in descending order

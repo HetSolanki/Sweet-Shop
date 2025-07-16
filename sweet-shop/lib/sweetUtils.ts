@@ -206,17 +206,18 @@ export const restockSweets = async ({
   quantity,
 }: {
   sweetId: string;
-  quantity: number;
+  quantity: string;
 }) => {
   // Input validation
   if (!sweetId || typeof sweetId !== "string") {
-    return {
+      return {
       status: 400,
       error: "Invalid or missing sweet ID.",
     };
   }
 
-  if (!quantity || typeof quantity !== "number" || quantity <= 0) {
+  const parseQty = Number(quantity);
+  if (!parseQty || isNaN(parseQty) || parseQty <= 0) {
     return {
       status: 400,
       error: "Quantity must be greater than zero.",
@@ -241,7 +242,7 @@ export const restockSweets = async ({
       where: { id: sweetId },
       data: {
         quantity: {
-          increment: quantity,
+          increment: parseQty,
         },
       },
     });

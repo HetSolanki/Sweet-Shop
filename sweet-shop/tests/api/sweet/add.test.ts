@@ -5,28 +5,31 @@ import { prisma } from "@/lib/prisma";
 describe("POST /api/sweets/add", () => {
   let categoryId: string;
 
+  // Seed a test category before running the tests
   beforeAll(async () => {
     const category = await prisma.category.upsert({
-      where: { name: "Milk-Based" },
+      where: { name: "test-category" },
       update: {},
-      create: { name: "Milk-Based" },
+      create: { name: "test-category" },
     });
 
-    categoryId = category.id; // Save ID for deletion test
+    categoryId = category.id; // Save sweet ID for deletion test
   });
 
-  // Clean up the database after tests
+  // Clean up the database after tests - (deleting test category and sweet created)
   afterAll(async () => {
     await prisma.sweet.deleteMany({
       where: {
         categoryId,
       },
     });
+
     await prisma.category.delete({
       where: {
         id: categoryId,
       },
     });
+
     await prisma.$disconnect();
   });
 

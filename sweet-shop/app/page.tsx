@@ -1,77 +1,110 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchAllSweets } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { fetchCategories } from "@/lib/api";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import SweetCard from "@/components/SweetCard";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Package, IndianRupee, Tag } from "lucide-react";
-import Popup from "@/components/popover";
+import { Sweet } from "@/types/sweetTypes";
 
-type Sweet = {
+type categories = {
   id: string;
   name: string;
-  quantity: number;
-  price: number;
-  category?: {
-    name: string;
-  };
 };
 
-export default function Home() {
+export default function ShopPage() {
   const [sweets, setSweets] = useState<Sweet[]>([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [sort, setSort] = useState("name_asc");
+  const [categories, setCategories] = useState<categories[]>([]);
 
-  const fetchSweetsData = async () => {
-    const res = await fetchAllSweets();
-    setSweets(res.data || []);
+  const fetchData = async () => {
+    const query = new URLSearchParams();
+    if (search) query.append("name", search);
+    if (category) query.append("category", category == "All" ? "" : category);
+    if (sort) query.append("sort", sort);
+
+    const res = await fetch(`/api/sweets?${query.toString()}`);
+    const data = await res.json();
+    setSweets(data.data);
+  };
+
+  const loadCategories = async () => {
+    const catRes = await fetchCategories();
+    setCategories(catRes || []);
   };
 
   useEffect(() => {
-    fetchSweetsData();
-  }, []);
+    fetchData();
+    loadCategories();
+  }, [search, category, sort]);
 
   return (
-    <main className="px-6 py-10">
-      <h1 className="text-3xl font-bold mb-6">🍬 Sweet Shop</h1>
+    <div className="px-6 py-8 space-y-6">
+      <h1 className="text-2xl font-bold">🍬 Browse Sweets</h1>
 
-      {sweets.length === 0 ? (
-        <p className="text-muted-foreground">No sweets available.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {sweets.map((sweet) => (
-            <Card
-              key={sweet.id}
-              className="shadow-sm hover:shadow-md transition"
-            >
-              <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Tag className="w-5 h-5 text-pink-500" />
-                  {sweet.name}
-                </CardTitle>
-                <p className="text-sm text-muted-foreground flex items-center gap-1">
-                  <Package className="w-4 h-4" />
-                  {sweet.category?.name || "Uncategorized"}
-                </p>
-              </CardHeader>
+      {/* Search / Filter / Sort */}
+      <div className="flex flex-wrap gap-4 items-center">
+        <Input
+          placeholder="Search by name..."
+          className="w-60"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <IndianRupee className="w-4 h-4 text-green-600" />
-                  <span className="font-semibold text-lg">{sweet.price}</span>
-                </div>
+        <Select onValueChange={setCategory} value={category}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+            {categories.map((cat) => (
+              <SelectItem key={cat.id} value={cat.name}>
+                {cat.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-                <div className="flex items-center gap-2 text-sm">
-                  <Package className="w-4 h-4 text-blue-500" />
-                  <span className="font-semibold text-lg">
-                    Stock: {sweet.quantity}
-                  </span>
-                </div>
+        <Select onValueChange={setSort} value={sort}>
+          <SelectTrigger className="w-43">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="name_asc">Name (A-Z)</SelectItem>
+            <SelectItem value="name_desc">Name (Z-A)</SelectItem>
+            <SelectItem value="price_asc">Price (Low → High)</SelectItem>
+            <SelectItem value="price_desc">Price (High → Low)</SelectItem>
+            <SelectItem value="quantity_asc">Stock (Low → High)</SelectItem>
+            <SelectItem value="quantity_desc">Stock (High → Low)</SelectItem>
+          </SelectContent>
+        </Select>
 
-                <Popup sweetId={sweet.id} onPurchase={fetchSweetsData} />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </main>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setSearch("");
+            setCategory("");
+            setSort("name_asc");
+          }}
+        >
+          Reset Filters
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {sweets.map((sweet) => (
+          <SweetCard key={sweet.id} sweet={sweet} onPurchase={fetchData} />
+        ))}
+      </div>
+    </div>
   );
 }

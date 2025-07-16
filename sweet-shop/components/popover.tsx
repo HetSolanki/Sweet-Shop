@@ -7,7 +7,7 @@ import { purchaseSweet } from "@/lib/api";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { AlertTriangle, Delete, XCircle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 export default function Popup({
   sweetId,
@@ -27,7 +27,7 @@ export default function Popup({
       setOpen(false);
       onPurchase();
     } else {
-      toast.custom((t) => (
+      toast.custom(() => (
         <div
           className="w-full max-w-sm bg-red-500 border border-destructive rounded-md shadow-lg p-4 flex items-start gap-3"
           role="alert"

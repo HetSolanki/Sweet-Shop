@@ -84,4 +84,27 @@ describe("POST /api/sweets/add", () => {
       "Invalid category. Please provide a valid category ID."
     );
   });
+  // Test case: Proving negative quantity should return 400 and error message
+  it("should return 400 and error message when quantity is negative", async () => {
+    const body = {
+      name: "Methai",
+      price: 1500,
+      quantity: -2,
+      categoryId,
+    };
+
+    const req = new Request("http://localhost/api/sweets/add", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const res = await POST(req);
+    const data = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(data.error).toBe("Invalid quantity. Please provide valid quantity");
+  });
 });

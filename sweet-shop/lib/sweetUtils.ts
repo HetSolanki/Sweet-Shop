@@ -22,8 +22,15 @@ export const addSweets = async ({
       };
     }
 
+    if (quantity < 0) {
+      return {
+        error: "Invalid quantity. Please provide valid quantity",
+        status: 400,
+      };
+    }
+    
     // Proceed to create the sweet and connect it to the valid category
-    const res = await prisma.sweet.create({
+    await prisma.sweet.create({
       data: {
         name,
         price,

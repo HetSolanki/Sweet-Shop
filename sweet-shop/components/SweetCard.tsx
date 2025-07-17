@@ -1,3 +1,4 @@
+"use client";
 import { Sweet } from "@/types/sweetTypes";
 import Popup from "./popover";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";

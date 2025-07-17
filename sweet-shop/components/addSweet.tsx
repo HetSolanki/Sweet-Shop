@@ -49,7 +49,6 @@ export default function AddSweetDialog() {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!name || !price || !quantity || !category) {
       toast.error("All fields are required.");
       return;
@@ -106,12 +105,13 @@ export default function AddSweetDialog() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Rasgulla"
+                required
               />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={category} onValueChange={setCategory} required>
                 <SelectTrigger id="category">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -134,6 +134,7 @@ export default function AddSweetDialog() {
                 min={1}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="e.g. 50"
+                required
               />
             </div>
 
@@ -146,6 +147,7 @@ export default function AddSweetDialog() {
                 min={1}
                 onChange={(e) => setQuantity(e.target.value)}
                 placeholder="e.g. 10"
+                required
               />
             </div>
           </div>

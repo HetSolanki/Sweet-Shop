@@ -65,6 +65,7 @@ export default function AddCategoryDialog() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Bengali"
+                required
               />
             </div>
           </div>

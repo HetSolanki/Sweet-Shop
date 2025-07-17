@@ -10,6 +10,13 @@ export const addSweets = async ({
   quantity,
 }: AddSweetType) => {
   try {
+    // Check for empty inputs
+    if (!name || !price || !quantity || !categoryId) {
+      return {
+        error: "All fields are required",
+        status: 400,
+      };
+    }
     // Check if the category ID exists in the database
     const category = await prisma.category.findUnique({
       where: { id: categoryId },
@@ -25,6 +32,12 @@ export const addSweets = async ({
     if (quantity < 0) {
       return {
         error: "Invalid quantity. Please provide valid quantity",
+        status: 400,
+      };
+    }
+    if (price < 0) {
+      return {
+        error: "Invalid price. Please provide valid price value",
         status: 400,
       };
     }
@@ -58,6 +71,14 @@ export const addSweets = async ({
 // Deletes a sweet by ID if it exists in the database
 export const deleteSweet = async (id: string) => {
   try {
+    // Check for empty inputs
+    if (!id) {
+      return {
+        error: "All fields are required",
+        status: 400,
+      };
+    }
+
     // Check if the sweet with the given ID exists
     const existingSweet = await prisma.sweet.findUnique({
       where: { id },
@@ -210,14 +231,21 @@ export const restockSweets = async ({
 }) => {
   // Input validation
   if (!sweetId || typeof sweetId !== "string") {
-      return {
+    return {
       status: 400,
       error: "Invalid or missing sweet ID.",
     };
   }
 
   const parseQty = Number(quantity);
-  if (!parseQty || isNaN(parseQty) || parseQty <= 0) {
+  if (isNaN(parseQty)) {
+    return {
+      status: 400,
+      error: "Quantity must be an number",
+    };
+  }
+
+  if (!parseQty || parseQty <= 0) {
     return {
       status: 400,
       error: "Quantity must be greater than zero.",

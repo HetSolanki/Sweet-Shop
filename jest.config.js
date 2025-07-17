@@ -11,12 +11,20 @@ const config = {
   transform: {
     ...tsJestTransformCfg,
   },
+  reporters: [
+    "default",
+    [
+      "./node_modules/jest-html-reporter",
+      {
+        pageTitle: "Test Report",
+      },
+    ],
+  ],
 
   // Maps TypeScript path aliases (e.g., "@/lib/...") to Jest-compatible module paths
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: "<rootDir>/",
   }),
-  
 };
 
 export default config;

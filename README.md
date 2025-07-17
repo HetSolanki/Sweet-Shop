@@ -70,7 +70,6 @@ Follow these steps to set up and run the **Sweet Shop Management System** locall
 
 ```bash
 git clone https://github.com/HetSolanki/Sweet-Shop.git
-cd sweet-shop
 ```
 
 ---

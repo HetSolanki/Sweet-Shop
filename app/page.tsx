@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchCategories } from "@/lib/api";
+import { fetchCategories } from "@/lib/category";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -36,7 +36,7 @@ export default function ShopPage() {
     if (minPrice) query.append("minPrice", minPrice);
     if (maxPrice) query.append("maxPrice", maxPrice);
     const res = await fetch(
-      `http://localhost:3000/api/sweets?${query.toString()}`
+      `${process.env.NEXT_PUBLIC_HOST}/api/sweets?${query.toString()}`
     );
     const data = await res.json();
     setSweets(data.data);

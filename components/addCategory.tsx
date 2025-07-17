@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { addCategory } from "@/lib/api";
+import { addCategory } from "@/lib/category";
 
 export default function AddCategoryDialog() {
   const [open, setOpen] = useState(false);

@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/select";
 import { AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { addSweet, fetchCategories } from "@/lib/api";
+import { addSweet } from "@/lib/api";
+import { fetchAllSweets, fetchCategories } from "@/lib/category";
 import { AddSweetType } from "@/types/sweetApiTypes";
 
 type Category = {

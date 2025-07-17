@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/datatable";
-import { fetchAllSweets } from "@/lib/api";
 import { Sweet } from "@/src/generated/prisma";
 import { columns } from "./column";
 import AddCategoryDialog from "@/components/addCategory";
 import AddSweetDialog from "@/components/addSweet";
+import { fetchAllSweets } from "@/lib/category";
 
 export default function AdminHome() {
   const [sweets, setSweets] = useState<Sweet[]>([]);

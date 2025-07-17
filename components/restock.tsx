@@ -28,7 +28,9 @@ export default function Restock({ sweetId }: { sweetId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Restock</Button>
+        <Button variant="outline" className="bg-green-300">
+          Restock
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="w-80">

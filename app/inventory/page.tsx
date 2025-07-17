@@ -27,8 +27,10 @@ export default function AdminHome() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Sweet Inventory
           </h1>
-          <AddSweetDialog />
-          <AddCategoryDialog />
+          <div className="flex gap-4">
+            <AddSweetDialog />
+            <AddCategoryDialog />
+          </div>
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">

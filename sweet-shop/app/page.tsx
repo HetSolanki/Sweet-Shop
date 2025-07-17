@@ -13,7 +13,6 @@ import {
 import SweetCard from "@/components/SweetCard";
 import { Button } from "@/components/ui/button";
 import { Sweet } from "@/types/sweetTypes";
-import AddDialog from "@/components/addSweet";
 
 type Category = {
   id: string;
@@ -57,7 +56,6 @@ export default function ShopPage() {
     <div className="px-6 py-8 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Browse Sweets</h1>
-        <AddDialog />
       </div>
 
       <div className="flex flex-wrap items-center gap-4">

@@ -89,7 +89,9 @@ describe("GET /api/sweets - Search & Sort", () => {
 
   // Test case: Filters sweets by category name
   it("should return sweets matching category name", async () => {
-    const req = new Request("http://localhost/api/sweets?category=Milk-Based");
+    const req = new Request(
+      "http://localhost/api/sweets?category=Milk-Based-2"
+    );
     const res = await GET(req);
     const data = await res.json();
 
@@ -102,7 +104,7 @@ describe("GET /api/sweets - Search & Sort", () => {
   // Test case: Filters sweets by both name and category
   it("should return sweets matching both name and category", async () => {
     const req = new Request(
-      "http://localhost/api/sweets?name=milk&category=Milk-Based"
+      "http://localhost/api/sweets?name=milk&category=Milk-Based-2"
     );
     const res = await GET(req);
     const data = await res.json();
@@ -116,7 +118,7 @@ describe("GET /api/sweets - Search & Sort", () => {
   // Test case: filters sweets within a specific price range
   it("should return sweets within the specified price range", async () => {
     const req = new Request(
-      "http://localhost/api/sweets?minPrice=30&maxPrice=50"
+      "http://localhost/api/sweets?minPrice=30&maxPrice=50&category=Milk-based-2"
     );
     const res = await GET(req);
     const data = await res.json();
@@ -129,7 +131,9 @@ describe("GET /api/sweets - Search & Sort", () => {
 
   // Test case: sorts sweets by price in ascending order
   it("should return sweets sorted by price ascending", async () => {
-    const req = new Request("http://localhost/api/sweets?sort=price_asc");
+    const req = new Request(
+      "http://localhost/api/sweets?sort=price_asc&category=Milk-based-2"
+    );
     const res = await GET(req);
     const data = await res.json();
 
@@ -140,7 +144,9 @@ describe("GET /api/sweets - Search & Sort", () => {
 
   // Test case: sorts sweets by name in descending order
   it("should return sweets sorted by name descending", async () => {
-    const req = new Request("http://localhost/api/sweets?sort=name_desc");
+    const req = new Request(
+      "http://localhost/api/sweets?sort=name_desc&category=Milk-based-2"
+    );
     const res = await GET(req);
     const data = await res.json();
 
@@ -150,7 +156,9 @@ describe("GET /api/sweets - Search & Sort", () => {
 
   // Test case: Returns an empty array if no matches found.
   it("should return empty array if no sweets match the filters", async () => {
-    const req = new Request("http://localhost/api/sweets?name=xyz");
+    const req = new Request(
+      "http://localhost/api/sweets?name=xyz&category=Milk-based-2"
+    );
     const res = await GET(req);
     const data = await res.json();
 

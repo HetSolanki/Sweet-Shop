@@ -107,4 +107,28 @@ describe("POST /api/sweets/add", () => {
     expect(res.status).toBe(400);
     expect(data.error).toBe("Invalid quantity. Please provide valid quantity");
   });
+
+  // Test case: Missing field should returns 400 and error message
+  it("should return 400 and error message when fields are missing", async () => {
+    const body = {
+      // Missing name
+      price: 1500,
+      quantity: -2,
+      categoryId,
+    };
+
+    const req = new Request("http://localhost/api/sweets/add", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const res = await POST(req);
+    const data = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(data.error).toBe("All fields are required");
+  });
 });

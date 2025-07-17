@@ -19,7 +19,9 @@ export default function Restock({ sweetId }: { sweetId: string }) {
     if (res.status === 200) {
       toast.success(res.message);
       setOpen(false);
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 500);
     } else {
       toast.info(res.error);
     }

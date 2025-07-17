@@ -22,19 +22,11 @@ export default function AlertDialogBox({ sweetId }: { sweetId: string }) {
     if (res.status === 200) {
       toast.success(res.message);
       setOpen(false);
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 500);
     } else {
-      toast.custom(() => (
-        <div
-          className="w-full max-w-sm bg-red-500 border border-destructive rounded-md shadow-lg p-4 flex items-start gap-3"
-          role="alert"
-        >
-          <AlertTriangle className="text-white h-5 w-5" />
-          <div className="">
-            <p className="text-sm text-white">{res.error}</p>
-          </div>
-        </div>
-      ));
+      toast.error(res.error);
     }
   };
   return (

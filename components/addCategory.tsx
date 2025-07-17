@@ -34,7 +34,9 @@ export default function AddCategoryDialog() {
     if (res.status === 201) {
       toast.success(res.message);
       setOpen(false);
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 500);
     } else {
       toast.error(res.error || "Failed to add category.");
     }

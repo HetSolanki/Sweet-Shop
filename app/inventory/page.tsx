@@ -2,18 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/ui/datatable";
+import { fetchAllSweets } from "@/lib/category";
 import { Sweet } from "@/src/generated/prisma";
 import { columns } from "./column";
 import AddCategoryDialog from "@/components/addCategory";
 import AddSweetDialog from "@/components/addSweet";
-import { fetchAllSweets } from "@/lib/category";
+import Spinner from "@/components/Spinner";
 
 export default function AdminHome() {
   const [sweets, setSweets] = useState<Sweet[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchSweets = async () => {
+    setLoading(true);
     const data = await fetchAllSweets();
     setSweets(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -33,8 +37,16 @@ export default function AdminHome() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
-          {sweets.length > 0 && <DataTable data={sweets} columns={columns} />}
+        <div>
+          {loading ? (
+            <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 min-h-[200px] flex justify-center items-center">
+              <Spinner />
+            </div>
+          ) : sweets.length > 0 ? (
+            <DataTable data={sweets} columns={columns} />
+          ) : (
+            <p className="text-muted-foreground">No sweets found.</p>
+          )}
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ import {
 import SweetCard from "@/components/SweetCard";
 import { Button } from "@/components/ui/button";
 import { Sweet } from "@/types/sweetTypes";
+import Spinner from "@/components/Spinner";
 
 type Category = {
   id: string;
@@ -27,19 +28,23 @@ export default function ShopPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     const query = new URLSearchParams();
     if (search) query.append("name", search);
     if (category) query.append("category", category === "All" ? "" : category);
     if (sort) query.append("sort", sort);
     if (minPrice) query.append("minPrice", minPrice);
     if (maxPrice) query.append("maxPrice", maxPrice);
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/sweets?${query.toString()}`
     );
     const data = await res.json();
     setSweets(data.data);
+    setLoading(false);
   };
 
   const loadCategories = async () => {
@@ -129,11 +134,17 @@ export default function ShopPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {sweets.map((sweet) => (
-          <SweetCard key={sweet.id} sweet={sweet} onPurchase={fetchData} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center py-10">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {sweets.map((sweet) => (
+            <SweetCard key={sweet.id} sweet={sweet} onPurchase={fetchData} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

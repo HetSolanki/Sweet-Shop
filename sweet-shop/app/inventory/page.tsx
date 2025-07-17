@@ -6,6 +6,7 @@ import { fetchAllSweets } from "@/lib/api";
 import { Sweet } from "@/src/generated/prisma";
 import { columns } from "./column";
 import AddCategoryDialog from "@/components/addCategory";
+import AddSweetDialog from "@/components/addSweet";
 
 export default function AdminHome() {
   const [sweets, setSweets] = useState<Sweet[]>([]);
@@ -26,6 +27,7 @@ export default function AdminHome() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Sweet Inventory
           </h1>
+          <AddSweetDialog />
           <AddCategoryDialog />
         </div>
 

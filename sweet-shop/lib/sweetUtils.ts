@@ -238,14 +238,7 @@ export const restockSweets = async ({
   }
 
   const parseQty = Number(quantity);
-  if (isNaN(parseQty)) {
-    return {
-      status: 400,
-      error: "Quantity must be an number",
-    };
-  }
-
-  if (!parseQty || parseQty <= 0) {
+  if (!parseQty || isNaN(parseQty) || parseQty <= 0) {
     return {
       status: 400,
       error: "Quantity must be greater than zero.",
